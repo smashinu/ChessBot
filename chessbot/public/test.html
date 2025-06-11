@@ -1,0 +1,5 @@
+<script>
+  const stockfish = new Worker('stockfish.js');
+  stockfish.onmessage = e => console.log("Stockfish says:", e.data);
+  stockfish.postMessage('uci');
+</script>
