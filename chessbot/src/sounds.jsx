@@ -1,0 +1,33 @@
+import { Howl } from "howler";
+
+
+const moveSound = new Howl({ src: ['/sounds/move.mp3'] });
+const captureSound = new Howl({ src: ['/sounds/capture.mp3'] });
+const victorySound = new Howl({ src: ['/sounds/Victory.mp3'] });
+const defeatSound = new Howl({ src: ['/sounds/Victory.mp3'] });
+const checkSound = new Howl({ src: ['/sounds/Check.mp3'] }); 
+
+export const Sounds = (move) => {
+    switch(move){
+        case "c": 
+            captureSound.play();
+            break;
+        case "n":
+            moveSound.play();
+            break;
+        case "b":
+            moveSound.play();
+            break;
+        case "w":
+            victorySound.play();
+            break;
+        case "d":
+            defeatSound.play();
+            break;
+        case "ch":
+            checkSound.play();
+            break;
+    }
+   
+};
+
