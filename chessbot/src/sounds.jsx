@@ -6,6 +6,9 @@ const captureSound = new Howl({ src: ['/sounds/capture.mp3'] });
 const victorySound = new Howl({ src: ['/sounds/Victory.mp3'] });
 const defeatSound = new Howl({ src: ['/sounds/Victory.mp3'] });
 const checkSound = new Howl({ src: ['/sounds/Check.mp3'] }); 
+const bellSound = new Howl({src: ["/sounds/bell.wav"]});
+const TimerSound = new Howl({src: ["/sounds/Timer.mp3"]});
+
 
 export const Sounds = (move) => {
     switch(move){
@@ -31,3 +34,17 @@ export const Sounds = (move) => {
    
 };
 
+
+export const playBell = () => {
+  const id = bellSound.play();
+  setTimeout(() => {
+    bellSound.stop(id); 
+  }, 3000);
+};
+
+export const playTimer = () => {
+  const id = TimerSound.play();
+  setTimeout(() => {
+    TimerSound.stop(id); 
+  }, 8000);
+};

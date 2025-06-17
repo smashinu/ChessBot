@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
-import { Sounds } from "./sounds";
+import { Sounds,playBell, playTimer } from "./sounds";
 
 import "./chessboardMVP.css";
 
@@ -10,26 +10,65 @@ export default function ChessBotMVP() {
   const [game, setGame] = useState(new Chess());
   const [fen, setFen] = useState("start");
   const [isBotThinking, setIsBotThinking] = useState(false);
+  const [timer, setTimer] = useState(60);
+  const [activeColor, setActiveColor] = useState("w");
+  const [isPaused, setIsPaused] = useState(false);
+  const [showTimeoutPopup, setShowTimeoutPopup] = useState(false);
+  const [skillLevel, setSkillLevel] = useState(0);
   const stockfishRef = useRef(null);
-  let CurrentSkillLevel = 0;
+  
   
 
   const handleVictory = () => {
     alert("🏆 You win! Checkmate.");    
     Sounds("w");
-    if (CurrentSkillLevel < 20) CurrentSkillLevel++;
+    setIsPaused(true);
+    if (skillLevel < 20) skillLevel(skillLevel++);
   };
 
-const handleDefeat = () => {
-    alert("💀 You lost! Checkmate.");
-    Sounds("d");
+  const handleDefeat = () => {
+      alert("💀 You lost! Checkmate.");
+      setIsPaused(true);
+      Sounds("d");
   };
 
+  const resetGame = () => {
+    const newGame = new Chess();
+    setGame(newGame);
+    setFen("start");
+    setIsBotThinking(false);
+    setTimer(60);
+    setActiveColor("w");
+    setIsPaused(false);
+    setShowTimeoutPopup(false);
+  };  
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setTimer((prevTime) => {
+        if (prevTime === 9) {
+          playTimer();
+        }
+
+        if (prevTime <= 1) {
+          clearInterval(interval);
+          setIsPaused(true);
+          setShowTimeoutPopup(true);
+          playBell();
+          return 0;
+        }
+
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeColor, isPaused]);
 
   const onPieceDrop = (sourceSquare, targetSquare) => {
-    if (isBotThinking) return false;
-
-    
+    if (isPaused || isBotThinking) return false;
 
     const move = game.move({
       from: sourceSquare,
@@ -54,10 +93,6 @@ const handleDefeat = () => {
 
     stockfishRef.current?.postMessage("position fen " + game.fen());
     stockfishRef.current?.postMessage("go depth 10");
-
-      
-    
-
     return true;
   };
 
@@ -82,7 +117,7 @@ const handleDefeat = () => {
           promotion: "q",
         });
 
-        console.log(`bot checked me? ${game.isCheck()}`);
+        setActiveColor((prevColor) => (prevColor === "w" ? "b" : "w"));
         if(game.isCheck()) {
           Sounds("ch");
         }
@@ -107,27 +142,27 @@ const handleDefeat = () => {
     // Controls the bot with post messages.
     stockfish.postMessage("uci");
     stockfish.postMessage("isready");
-    stockfish.postMessage(`setoption name Skill Level value ${CurrentSkillLevel}`)
+    stockfish.postMessage(`setoption name Skill Level value ${skillLevel}`)
     stockfish.postMessage("setoption name Skill Level Maximum Error value 200");
     stockfish.postMessage("setoption name Skill Level Probability value 1");
     stockfish.postMessage("isready");
 
     return () => stockfish.terminate();
-  }, [game]);
+  }, [game,skillLevel]);
 
-  const resetGame = () => {
-    const newGame = new Chess();
-    setGame(newGame);
-    setFen("start");
-    setIsBotThinking(false);
-  };
-
-
-
-
+  
   return (
     <div className="MainContainer">
       <h1 className="text-2xl font-bold">Chess Bot MVP</h1>
+      <div style={{ textAlign: "center", marginTop: "10px", fontSize: "24px" }}>
+        <span
+          className={timer <= 5 ? "blink" : ""}
+          style={{ color: timer <= 5 ? "red" : "black" }}
+        >
+          {String(Math.floor(timer / 60)).padStart(2, "0")}:
+          {String(timer % 60).padStart(2, "0")}
+        </span>
+      </div>
       <div className="ChessBoardContainer">
           <Chessboard
           position={fen}
@@ -139,6 +174,24 @@ const handleDefeat = () => {
       <button onClick={resetGame} className="px-4 py-2 bg-blue-500 text-white rounded">
         Reset Game
       </button>
+      {showTimeoutPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2>Time's up!</h2>
+            <button
+              onClick={() => {
+                setTimer(60);
+                setShowTimeoutPopup(false);
+                setIsPaused(false);
+              }}
+            >
+              Resume Turn
+            </button>
+          </div>
+        </div>
+      )}
     </div>
+
+    
   );
 }
