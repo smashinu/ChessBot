@@ -23,7 +23,7 @@ export default function ChessBotMVP() {
     alert("🏆 You win! Checkmate.");    
     Sounds("w");
     setIsPaused(true);
-    if (skillLevel < 20) skillLevel(skillLevel++);
+    if (skillLevel < 20) setSkillLevel(skillLevel + 1);
   };
 
   const handleDefeat = () => {
@@ -77,7 +77,7 @@ export default function ChessBotMVP() {
     });
 
     if (!move) return false;
-    console.log(game.isCheck());
+  
     if(game.isCheck()) {
           Sounds("ch");
     }
@@ -126,15 +126,15 @@ export default function ChessBotMVP() {
           Sounds(soundmove.flags);
         }
        
+       
+        console.log("Stockfish played:", move, "from FEN:", game.fen());
+        setFen(game.fen());
+        setIsBotThinking(false);
+
         if(game.isCheckmate()){
           handleDefeat();
         }
 
-        //console.log("Stockfish played:", move, "from FEN:", game.fen());
-        setFen(game.fen());
-        setIsBotThinking(false);
-
-      
  
       }
     };
@@ -153,12 +153,19 @@ export default function ChessBotMVP() {
   
   return (
     <div className="MainContainer">
-      <h1 className="text-2xl font-bold">Chess Bot MVP</h1>
-      <div style={{ textAlign: "center", marginTop: "10px", fontSize: "24px" }}>
-        <span
-          className={timer <= 5 ? "blink" : ""}
-          style={{ color: timer <= 5 ? "red" : "black" }}
-        >
+      <div className="hero-banner">
+        <div id="logoContainer">
+            <img src="/images/Logo.webp"  id="tafeLogo" alt="South metro tafe"></img>
+        </div>
+        
+        <div id="textContainer">
+            <h2 className="hero-title"> Welcome to South Metropolitan afe ChessBot ♟️</h2>
+            <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
+        </div>
+
+      </div>
+      <div className="timer-display">
+        <span className={timer <= 5 ? "blink timer-red" : ""}>
           {String(Math.floor(timer / 60)).padStart(2, "0")}:
           {String(timer % 60).padStart(2, "0")}
         </span>
