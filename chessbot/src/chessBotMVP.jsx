@@ -159,7 +159,7 @@ export default function ChessBotMVP() {
         </div>
         
         <div id="textContainer">
-            <h2 className="hero-title"> Welcome to South Metropolitan afe ChessBot ♟️</h2>
+            <h2 className="hero-title"> Welcome to South Metropolitan Tafe ChessBot ♟️</h2>
             <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
         </div>
 
