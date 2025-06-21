@@ -41,8 +41,8 @@
 }
 
 #textContainer {
-  
-  text-align: center;
+  display: flex;
+  align-content: center;
 }
 
 .hero-title {

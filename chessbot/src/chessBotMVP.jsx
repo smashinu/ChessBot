@@ -14,6 +14,7 @@ export default function ChessBotMVP() {
   const [activeColor, setActiveColor] = useState("w");
   const [isPaused, setIsPaused] = useState(false);
   const [showTimeoutPopup, setShowTimeoutPopup] = useState(false);
+  const [showInvalidMovePopup, setShowInvalidMovePopup] = useState(false);
   const [skillLevel, setSkillLevel] = useState(0);
   const stockfishRef = useRef(null);
   
@@ -69,31 +70,38 @@ export default function ChessBotMVP() {
 
   const onPieceDrop = (sourceSquare, targetSquare) => {
     if (isPaused || isBotThinking) return false;
+    try{
+        const move = game.move({
+        from: sourceSquare,
+        to: targetSquare,
+        promotion: "q",
+      });
 
-    const move = game.move({
-      from: sourceSquare,
-      to: targetSquare,
-      promotion: "q",
-    });
-
-    if (!move) return false;
+    
+      if(!move) return false;
   
-    if(game.isCheck()) {
-          Sounds("ch");
-    }
-    else{
-       Sounds(move.flags);
-    }
-   
-    if(game.isCheckmate()){
-      handleVictory();
-    }
-    setFen(game.fen());
-    setIsBotThinking(true);
+      if(game.isCheck()) {
+            Sounds("ch");
+      }
+      else{
+        Sounds(move.flags);
+      }
+    
+      if(game.isCheckmate()){
+        handleVictory();
+      }
+      setFen(game.fen());
+      setIsBotThinking(true);
 
-    stockfishRef.current?.postMessage("position fen " + game.fen());
-    stockfishRef.current?.postMessage("go depth 10");
-    return true;
+      stockfishRef.current?.postMessage("position fen " + game.fen());
+      stockfishRef.current?.postMessage("go depth 10");
+      return true;
+    }
+    catch{
+       setShowInvalidMovePopup(true);
+       return;
+    }
+    
   };
 
 
@@ -159,8 +167,11 @@ export default function ChessBotMVP() {
         </div>
         
         <div id="textContainer">
-            <h2 className="hero-title"> Welcome to South Metropolitan Tafe ChessBot ♟️</h2>
-            <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
+          <div>
+                <h2 className="hero-title"> Welcome to South Metropolitan Tafe ChessBot ♟️</h2>
+                <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
+          </div>
+
         </div>
 
       </div>
@@ -194,6 +205,14 @@ export default function ChessBotMVP() {
             >
               Resume Turn
             </button>
+          </div>
+        </div>
+      )}
+      {showInvalidMovePopup && (
+        <div className="invalid-move-modal-overlay">
+          <div className="invalid-move-modal">
+            <p>⛔ Can't move there sorry mate</p>
+            <button onClick={() => setShowInvalidMovePopup(false)}>OK</button>
           </div>
         </div>
       )}
