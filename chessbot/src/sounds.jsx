@@ -8,9 +8,10 @@ const defeatSound = new Howl({ src: ['/sounds/Victory.mp3'] });
 const checkSound = new Howl({ src: ['/sounds/Check.mp3'] }); 
 const bellSound = new Howl({src: ["/sounds/bell.wav"]});
 const TimerSound = new Howl({src: ["/sounds/Timer.mp3"]});
-
+const castleSound = new Howl({src: ["/sounds/Castles.mp3"]});
 
 export const Sounds = (move) => {
+    console.log(move);
     switch(move){
         case "c": 
             captureSound.play();
@@ -30,6 +31,8 @@ export const Sounds = (move) => {
         case "ch":
             checkSound.play();
             break;
+        case "k":
+            castleSound.play();
     }
    
 };

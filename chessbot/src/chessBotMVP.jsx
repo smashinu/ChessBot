@@ -18,7 +18,32 @@ export default function ChessBotMVP() {
   const [skillLevel, setSkillLevel] = useState(0);
   const stockfishRef = useRef(null);
   
-  
+  const handleGameState = (game) => {
+      if(game.isCheckmate()){
+        handleVictory();
+        return;
+      } 
+      else if(game.isDraw()){
+         handleDraw();
+         return;
+      }
+      else if(game.isStalemate()) {
+        handleStaleMate();
+        return
+      }
+  }
+
+  const handleDraw = () => {
+      alert("It's a draw!");
+      setIsPaused(true);
+      return;
+  }
+
+  const handleStaleMate = () => {
+      alert("Stalemate!");
+      setIsPaused(true);
+      return;
+  }
 
   const handleVictory = () => {
     alert("🏆 You win! Checkmate.");    
@@ -87,12 +112,11 @@ export default function ChessBotMVP() {
         Sounds(move.flags);
       }
     
-      if(game.isCheckmate()){
-        handleVictory();
-      }
+  
+      
       setFen(game.fen());
       setIsBotThinking(true);
-
+      handleGameState(game);
       stockfishRef.current?.postMessage("position fen " + game.fen());
       stockfishRef.current?.postMessage("go depth 10");
       return true;
@@ -127,22 +151,24 @@ export default function ChessBotMVP() {
 
         setActiveColor((prevColor) => (prevColor === "w" ? "b" : "w"));
         if(game.isCheck()) {
-          Sounds("ch");
+          if(soundmove){
+              Sounds("ch");
+          }
+   
         }
 
         else{
-          Sounds(soundmove.flags);
+          if(soundmove){
+              Sounds(soundmove.flags);
+          }
+       
         }
        
-       
+        
         console.log("Stockfish played:", move, "from FEN:", game.fen());
         setFen(game.fen());
         setIsBotThinking(false);
-
-        if(game.isCheckmate()){
-          handleDefeat();
-        }
-
+        handleGameState(game);
  
       }
     };
@@ -156,7 +182,7 @@ export default function ChessBotMVP() {
     stockfish.postMessage("isready");
 
     return () => stockfish.terminate();
-  }, [game,skillLevel]);
+  }, [skillLevel]);
 
   
   return (
@@ -167,11 +193,8 @@ export default function ChessBotMVP() {
         </div>
         
         <div id="textContainer">
-          <div>
-                <h2 className="hero-title"> Welcome to South Metropolitan Tafe ChessBot ♟️</h2>
-                <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
-          </div>
-
+            <h2 className="hero-title"> Welcome to South Metropolitan Tafe ChessBot ♟️</h2>
+            <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
         </div>
 
       </div>
@@ -189,7 +212,7 @@ export default function ChessBotMVP() {
           />
       </div>
      
-      <button onClick={resetGame} className="px-4 py-2 bg-blue-500 text-white rounded">
+      <button onClick={resetGame} className="btn-primary">
         Reset Game
       </button>
       {showTimeoutPopup && (
@@ -197,6 +220,7 @@ export default function ChessBotMVP() {
           <div className="popup-content">
             <h2>Time's up!</h2>
             <button
+              className="btn-primary"
               onClick={() => {
                 setTimer(60);
                 setShowTimeoutPopup(false);
@@ -211,8 +235,8 @@ export default function ChessBotMVP() {
       {showInvalidMovePopup && (
         <div className="invalid-move-modal-overlay">
           <div className="invalid-move-modal">
-            <p>⛔ Can't move there sorry mate</p>
-            <button onClick={() => setShowInvalidMovePopup(false)}>OK</button>
+            <p>⛔ Can't move there, sorry mate</p>
+            <button onClick={() => setShowInvalidMovePopup(false)} className="btn-primary">OK</button>
           </div>
         </div>
       )}
