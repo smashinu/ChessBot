@@ -24,45 +24,47 @@
 .hero-banner {
   display: flex;
   align-items: center;
-  text-align: center;
-  height: 120px; 
+  justify-content: center;
+  flex-wrap: wrap;
   background: linear-gradient(#6a1b9a 0%, #8e24aa 100%);
-  color: black;
   width: 100%;
-}
-
-#tafeLogo {
-
-  height: 100%;
-  background-color: white;
+  box-sizing: border-box;
 }
 
 #logoContainer {
-  height: 100%; 
-  display: flex;
-  align-items: center;
+  flex: 0 0 auto;
+  max-width: 240px; /* forces to now go anybiddger */
+  margin-right: 1rem;
+}
+
+#tafeLogo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: white;
 }
 
 #textContainer {
-  flex: 1; 
+  flex: 1;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  min-width: 200px;
 }
 
 .hero-title {
   font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin: 0;
+  color: black;
 }
 
 .hero-subtitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 400;
   opacity: 0.95;
+  margin: 0;
+  color: black;
 }
+
 
 
 /* Chessboard container */
@@ -155,4 +157,24 @@
   border-radius: 12px;
   box-shadow: 0 0 10px black;
   text-align: center;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .hero-banner {
+    flex-direction: column;
+  }
+
+  #logoContainer {
+    margin: 0 0 1rem 0;
+    max-width: 80%;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
 }

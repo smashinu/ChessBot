@@ -196,7 +196,6 @@ export default function ChessBotMVP() {
             <h2 className="hero-title"> Welcome to South Metropolitan Tafe ChessBot ♟️</h2>
             <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
         </div>
-
       </div>
       <div className="timer-display">
         <span className={timer <= 5 ? "blink timer-red" : ""}>
