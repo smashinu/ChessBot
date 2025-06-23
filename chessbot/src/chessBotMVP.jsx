@@ -7,7 +7,6 @@ import { Sounds,playBell, playTimer } from "./sounds";
 import "./chessboardMVP.css";
 
 export default function ChessBotMVP() {
-  //const [gameRef.current, setgameRef.current] = useState(new Chess());
   const [fen, setFen] = useState("start");
   const [isBotThinking, setIsBotThinking] = useState(false);
   const [timer, setTimer] = useState(60);
