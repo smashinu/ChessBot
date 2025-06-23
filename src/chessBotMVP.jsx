@@ -4,7 +4,7 @@ import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { Sounds,playBell, playTimer } from "./sounds";
 
-import "./chessboardMVP.css";
+import "./chessBotMVP.css";
 
 export default function ChessBotMVP() {
   const [fen, setFen] = useState("start");
@@ -144,8 +144,6 @@ export default function ChessBotMVP() {
   
         const from = move.slice(0, 2);
         const to = move.slice(2, 4);
-        const piece = gameRef.current.get(from);
-  
         const moveDetails = { from, to, promotion: "q" };
     
   
