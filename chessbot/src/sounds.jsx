@@ -11,7 +11,7 @@ const TimerSound = new Howl({src: ["/sounds/Timer.mp3"]});
 const castleSound = new Howl({src: ["/sounds/Castles.mp3"]});
 
 export const Sounds = (move) => {
-    console.log(move);
+
     switch(move){
         case "c": 
             captureSound.play();
