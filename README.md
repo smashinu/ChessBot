@@ -1,16 +1,17 @@
 # ♟️ ChessBotMVP
 
-Welcome to **ChessBotMVP** — a React-based chess bot app powered by Stockfish and `chess.js`. Whether you're a grandmaster or just here to humiliate a CPU, this app lets you play against one of the strongest engines ever... with a timer ticking and your pride on the line.
+Welcome to **ChessBotMVP** — a React-based chess bot app powered by Stockfish and `chess.js`. Whether you're a grandmaster or just here to humiliate a CPU, this app lets you play against one of the strongest engines ever... 
+w̶i̶t̶h̶ ̶a̶ ̶t̶i̶m̶e̶r̶ ̶t̶i̶c̶k̶i̶n̶g̶ ̶a̶n̶d̶ ̶y̶o̶u̶r̶ ̶p̶r̶i̶d̶e̶ ̶o̶n̶ ̶t̶h̶e̶ ̶l̶i̶n̶e̶.
 
 ---
 
 ## 🚀 Features
 
 - 🎯 Play against Stockfish in real time
-- ⏱️ One-minute timer per side — fast chess, no mercy
+- ⏱️ O̶n̶e̶-̶m̶i̶n̶u̶t̶e̶ ̶t̶i̶m̶e̶r̶ ̶p̶e̶r̶ ̶s̶i̶d̶e̶ ̶—̶ ̶f̶a̶s̶t̶ ̶c̶h̶e̶s̶s̶,̶ ̶n̶o̶ ̶m̶e̶r̶c̶y̶
 - 🚫 Invalid move popup — no illegal nonsense allowed
 - 👑 Automatic pawn promotion (to queen by default)
-- 📈 Difficulty scaling (coming soon!)
+- 📈 Difficulty scaling
 - 🔊 Sound effects for moves and captures
 - 🧠 Web Worker integration for non-blocking Stockfish calculations
 
