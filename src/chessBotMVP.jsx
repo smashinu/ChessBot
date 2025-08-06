@@ -2,17 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
-import { Sounds,playBell, playTimer } from "./sounds";
+import { Sounds } from "./sounds";
 
 import "./chessBotMVP.css";
 
 export default function ChessBotMVP() {
   const [fen, setFen] = useState("start");
   const [isBotThinking, setIsBotThinking] = useState(false);
-  const [timer, setTimer] = useState(60);
-  const [activeColor, setActiveColor] = useState("w");
   const [isPaused, setIsPaused] = useState(false);
-  const [showTimeoutPopup, setShowTimeoutPopup] = useState(false);
   const [showInvalidMovePopup, setShowInvalidMovePopup] = useState(false);
   const [skillLevel, setSkillLevel] = useState(0);
   const stockfishRef = useRef(null);
@@ -62,35 +59,9 @@ export default function ChessBotMVP() {
     gameRef.current = new Chess();
     setFen("start");
     setIsBotThinking(false);
-    setTimer(60);
-    setActiveColor("w");
     setIsPaused(false);
-    setShowTimeoutPopup(false);
   };  
 
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      setTimer((prevTime) => {
-        if (prevTime === 9) {
-          playTimer();
-        }
-
-        if (prevTime <= 1) {
-          clearInterval(interval);
-          setIsPaused(true);
-          setShowTimeoutPopup(true);
-          playBell();
-          return 0;
-        }
-
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [activeColor, isPaused]);
 
   const onPieceDrop = (sourceSquare, targetSquare) => {
     if (isPaused || isBotThinking) return false;
@@ -148,9 +119,7 @@ export default function ChessBotMVP() {
     
   
         const soundmove = gameRef.current.move(moveDetails);
-  
-        setActiveColor((prevColor) => (prevColor === "w" ? "b" : "w"));
-  
+        
         if (gameRef.current.isCheck() && soundmove) {
           Sounds("ch");
         } else if (soundmove) {
@@ -188,12 +157,6 @@ export default function ChessBotMVP() {
             <p className="hero-subtitle">Sharpen your skills, beat the bot, and race against the clock.</p>
         </div>
       </div>
-      <div className="timer-display">
-        <span className={timer <= 5 ? "blink timer-red" : ""}>
-          {String(Math.floor(timer / 60)).padStart(2, "0")}:
-          {String(timer % 60).padStart(2, "0")}
-        </span>
-      </div>
       <div className="ChessBoardContainer">
           <Chessboard
           position={fen}
@@ -206,23 +169,6 @@ export default function ChessBotMVP() {
         Reset game!
       </button>
  
-      {showTimeoutPopup && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <h2>Time's up!</h2>
-            <button
-              className="btn-primary"
-              onClick={() => {
-                setTimer(60);
-                setShowTimeoutPopup(false);
-                setIsPaused(false);
-              }}
-            >
-              Resume Turn
-            </button>
-          </div>
-        </div>
-      )}
       {showInvalidMovePopup && (
         <div className="invalid-move-modal-overlay">
           <div className="invalid-move-modal">
